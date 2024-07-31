@@ -60,7 +60,7 @@ class UtilisateursController extends Controller
             'mot_de_passe' => Hash::make($request->mot_de_passe),
             'photo_profil' => $photoPath,
         ]);
-
+        dd($request);
         return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Veuillez vous connecter.');
     }
 

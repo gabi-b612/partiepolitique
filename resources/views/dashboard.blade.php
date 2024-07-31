@@ -1,33 +1,26 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Tableau de bord</title>
-</head>
-<body>
-<h1>Bienvenue, {{ Auth::user()->prenom }}</h1>
-<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-    @csrf
-</form>
+@extends('base')
 
-<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Déconnexion</a>
+@section('title', 'Tableau de bord')
 
-<h2>Votre demande d'adhésion</h2>
+@section('content')
+    <div class="container mx-auto p-6">
+        <div class="w-full max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6">Bonjour, {{ Auth::user()->prenom }}</h2>
 
-@if(isset($demandes))
-    @if($demandes === false)
-        <p>Vous n'avez pas encore fait de demande d'adhésion.</p>
-    @else
-        <p> Statut de la demande : {{ $demandes->statut }}</p>
-    @endif
-@else
-    <p>Vous n'avez pas encore fait de demande d'adhésion.</p>
-@endif
+            <div class="flex items-center mb-6">
+                <img src="{{ Storage::url(Auth::user()->photo_profil) }}" alt="Photo de profil" class="w-16 h-16 rounded-full object-cover mr-4">
+                <span class="text-xl font-semibold">{{ Auth::user()->prenom }} {{ Auth::user()->nom_postnom }}</span>
+            </div>
 
-<form action="{{ route('demande_adhesion') }}" method="POST">
-    @csrf
-    <button type="submit">Faire une demande d'adhésion</button>
-</form>
-
-</body>
-</html>
+            <h3 class="text-xl font-semibold mb-4">Vos demandes d'adhésion</h3>
+            @if ($demandes)
+                <p class="mb-4">Vous avez déjà envoyé une demande. Statut : {{ $demandes->statut }}</p>
+            @else
+                <form action="{{ route('demande_adhesion') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Faire une demande d'adhésion</button>
+                </form>
+            @endif
+        </div>
+    </div>
+@endsection
