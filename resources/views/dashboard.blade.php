@@ -12,9 +12,16 @@
                 <span class="text-xl font-semibold">{{ Auth::user()->prenom }} {{ Auth::user()->nom_postnom }}</span>
             </div>
 
-            <h3 class="text-xl font-semibold mb-4">Vos demandes d'adhésion</h3>
             @if ($demandes)
-                <p class="mb-4">Vous avez déjà envoyé une demande. Statut : {{ $demandes->statut }}</p>
+                @if($demandes->statut === 'en_attente')
+                    <p class="text-xl font-semibold mb-4">Votre demande est   {{ $demandes->statut }}</p>
+                @elseif($demandes->statut === 'refusee')
+                    <p class="text-xl font-semibold mb-4">Votre demande a été   {{ $demandes->statut }}</p>
+                @elseif($demandes->statut === 'acceptee')
+                    <p class="text-xl font-semibold mb-4">Felicitation votre demande a été .  {{ $demandes->statut }}</p>
+                    <p class="text-xl font-semibold mb-4">Vous etes un membre</p>
+                @endif
+
             @else
                 <form action="{{ route('demande_adhesion') }}" method="POST">
                     @csrf

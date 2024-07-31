@@ -12,7 +12,7 @@
     <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold">Administration</h1>
         <nav>
-            <a href="{{ route('showAdminUser') }}" class="px-4 py-2 hover:bg-blue-700">Utilisateurs</a>
+{{--            <a href="{{ route('showAdminUser') }}" class="px-4 py-2 hover:bg-blue-700">Utilisateurs</a>--}}
             <a href="{{ route('showDemandeAttentes') }}" class="px-4 py-2 hover:bg-blue-700">Demandes en attente</a>
             <a href="{{ route('showDemandeAttentesAcceptees') }}" class="px-4 py-2 hover:bg-blue-700">Demandes acceptées</a>
             <a href="{{ route('showDemandeAttentesRefusees') }}" class="px-4 py-2 hover:bg-blue-700">Demandes refusées</a>

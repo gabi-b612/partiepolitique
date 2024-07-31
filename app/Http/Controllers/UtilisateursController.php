@@ -96,6 +96,13 @@ class UtilisateursController extends Controller
         return view('admin.showDemandeAttentes', compact('demandesEnAttente'));
     }
 
+    public function showUser($id): View|Factory|Application
+    {
+        $utilisateur = utilisateurs::with('demandes')->findOrFail($id);
+        $demande = demandes_adhesion::findOrFail($id);
+        return view('admin.utilisateur', compact('utilisateur', 'demande'));
+    }
+
     public function showDemandesRefusees(): View|Factory|Application
     {
         $demandesRefusees = demandes_adhesion::where('statut', 'refusee')->with('utilisateur')->get();
@@ -112,14 +119,14 @@ class UtilisateursController extends Controller
     {
         $demande = demandes_adhesion::findOrFail($id);
         $demande->update(['statut' => 'acceptee']);
-        return back()->with('success', 'La demande a été acceptée.');
+        return redirect()->route('showDemandeAttentesAcceptees')->with('success', 'La demande a été acceptée.');
     }
 
     public function refuserDemande($id): RedirectResponse
     {
         $demande = demandes_adhesion::findOrFail($id);
         $demande->update(['statut' => 'refusee']);
-        return back()->with('success', 'La demande a été refusée.');
+        return redirect()->route('showDemandeAttentesRefusees')->with('success', 'La demande a été refusée.');
     }
 
 }

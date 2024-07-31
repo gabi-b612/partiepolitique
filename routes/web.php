@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\UtilisateursController;
+use App\Models\utilisateurs;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,9 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::post('demande-adhesion', [UtilisateursController::class, 'demandeAdhesion'])->name('demande_adhesion');
 });
 
-Route::get('admin', [UtilisateursController::class, 'showAdminUser'])->name('showAdminUser');
+//Route::get('admin', [UtilisateursController::class, 'showAdminUser'])->name('showAdminUser');
 Route::get('admin/demantes/attentes', [UtilisateursController::class, 'showDemandesEnAttentes'])->name('showDemandeAttentes');
-Route::get('admin/demantes/acceptees', [UtilisateursController::class, 'showDemandesAcceptees'])->name('showDemandeAttentesAcceptees');
+
+Route::get('admin/utilisteur/{id}',[UtilisateursController::class,'showUser'])->name('utilisateur');
+
+Route::get('admin', [UtilisateursController::class, 'showDemandesAcceptees'])->name('showDemandeAttentesAcceptees');
 Route::get('admin/demantes/refusees', [UtilisateursController::class, 'showDemandesRefusees'])->name('showDemandeAttentesRefusees');
 Route::patch('admin/accepter-demande/{id}', [UtilisateursController::class, 'accepterDemande'])->name('accepter_demande');
 Route::patch('admin/refuser_demande/{id}', [UtilisateursController::class, 'refuserDemande'])->name('refuser_demande');

@@ -32,8 +32,8 @@
                 <li class="mb-4 flex items-center">
                     <img src="{{ asset('storage/' . $demande->utilisateur->photo_profil) }}" alt="Photo de profil" class="w-12 h-12 rounded-full mr-4">
                     <div>
-{{--                        {{ route('admin.utilisateur', $demande->utilisateur->id) }}--}}
-                        <a href="" class="text-blue-500 hover:underline">
+{{--                        "{{route('utilisateur', $demande->utilisateur->id}}"--}}
+                        <a href=" {{route('utilisateur', $demande->utilisateur->id)}} " class="text-blue-500 hover:underline">
                             {{ $demande->utilisateur->prenom }} {{ $demande->utilisateur->nom_postnom }}
                         </a>
                         <p class="text-gray-600">État de la demande : <span class="text-yellow-500">En attente</span></p>

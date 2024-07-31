@@ -17,6 +17,6 @@ class demandes_adhesion extends Model
 
     public function utilisateur(): BelongsTo
     {
-        return $this->belongsTo(utilisateurs::class);
+        return $this->belongsTo(utilisateurs::class, 'utilisateur_id');
     }
 }
