@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class utilisateurs extends Model
+class utilisateurs extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'photo_profil',
@@ -37,6 +37,16 @@ class utilisateurs extends Model
 
     public function demandes(): HasOne
     {
-        return $this->hasOne(demandes_adhesion::class);
+        return $this->hasOne(demandes_adhesion::class,'utilisateur_id');
+    }
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword(): string
+    {
+        return $this->mot_de_passe;
     }
 }
