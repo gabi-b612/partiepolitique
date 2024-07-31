@@ -60,7 +60,6 @@ class UtilisateursController extends Controller
             'mot_de_passe' => Hash::make($request->mot_de_passe),
             'photo_profil' => $photoPath,
         ]);
-        dd($request);
         return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Veuillez vous connecter.');
     }
 
@@ -84,63 +83,29 @@ class UtilisateursController extends Controller
         return redirect()->route('dashboard')->with('success', 'Votre demande d\'adhésion a été envoyée.');
     }
 
-    public function showRegisterAdminForm(): View|Factory|Application
+
+    public function showAdminUser(): View|Factory|Application
     {
-        return view('auth.register_admin');
+        $utilisateurs = utilisateurs::with('demandes')->get();
+        return view('admin.index', compact('utilisateurs'));
     }
 
-    public function registerAdmin(UtilisateursFormRequest $request): RedirectResponse
+    public function showDemandesEnAttentes(): View|Factory|Application
     {
-
-        $photoPath = $request->file('photo_profil')->store('photos_profil', 'public');
-
-        utilisateurs::create([
-            'prenom' => $request->prenom,
-            'nom_postnom' => $request->nom_postnom,
-            'sexe' => $request->sexe,
-            'naissance' => $request->naissance,
-            'province_origine' => $request->province_origine,
-            'territoire_origine' => $request->territoire_origine,
-            'etudes' => $request->etudes,
-            'adresse' => $request->adresse,
-            'telephone' => $request->telephone,
-            'email' => $request->email,
-            'mot_de_passe' => Hash::make($request->mot_de_passe),
-            'photo_profil' => $photoPath,
-            'role' => 'administrateur',
-        ]);
-
-        return redirect()->route('login')->with('success', 'Votre compte administrateur a été créé avec succès. Veuillez vous connecter.');
+        $demandesEnAttente = demandes_adhesion::where('statut', 'en_attente')->with('utilisateur')->get();
+        return view('admin.showDemandeAttentes', compact('demandesEnAttente'));
     }
 
-    public function showAdminLoginForm(): View|Factory|Application
+    public function showDemandesRefusees(): View|Factory|Application
     {
-        return view('auth.login_admin');
+        $demandesRefusees = demandes_adhesion::where('statut', 'refusee')->with('utilisateur')->get();
+        return view('admin.showDemandeRefusees', compact('demandesRefusees'));
     }
 
-    public function loginAdmin(Request $request): RedirectResponse
+    public function showDemandesAcceptees(): View|Factory|Application
     {
-        $request->validate([
-            'email' => 'required|email',
-            'mot_de_passe' => 'required|string|min:8',
-        ]);
-
-        $credentials = $request->only('email', 'mot_de_passe');
-
-        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['mot_de_passe'], 'role' => 'administrateur'])) {
-            return redirect()->route('admin.index');
-        }
-
-        return back()->withErrors(['email' => 'Les informations d\'identification ne correspondent pas.']);
-    }
-
-    public function showAdmin(): View|Factory|Application
-    {
-        $demandesEnAttente = demandes_adhesion::where('statut', 'en_attente')->get();
-        $demandesAcceptees = demandes_adhesion::where('statut', 'acceptee')->get();
-        $demandesRefusees = demandes_adhesion::where('statut', 'refusee')->get();
-
-        return view('showAdmin', compact('demandesEnAttente', 'demandesAcceptees', 'demandesRefusees'));
+        $demandesAcceptees = demandes_adhesion::where('statut', 'acceptee')->with('utilisateur')->get();
+        return view('admin.showDemandesAcceptees', compact('demandesAcceptees'));
     }
 
     public function accepterDemande($id): RedirectResponse
